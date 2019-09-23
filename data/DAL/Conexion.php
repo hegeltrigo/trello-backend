@@ -10,7 +10,7 @@ class Connection {
     private $server = "localhost";
     private $usr = "user";
     private $pass = "password";
-    private $db = "ejemplopersona";
+    private $db = "trello";
     private $connection;
 
     function getConnection() {
