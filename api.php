@@ -1,5 +1,9 @@
 <?php
 
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
 include_once './data/DAL/Conexion.php';
 include_once './data/BLL/ListaBLL.php';
 include_once './data/DTO/Lista.php';
@@ -33,6 +37,30 @@ switch ($task) {
         }
 
         break;
+    case "insert_card":
+    
+        if (isset($_REQUEST["title"]) && isset($_REQUEST["description"]) && isset($_REQUEST["end_date"]) && isset($_REQUEST["list_id"]) && isset($_REQUEST["archived"]) ) {
+            $title = $_REQUEST["title"];
+            $description = $_REQUEST["description"];    
+            $end_date = $_REQUEST["end_date"];  
+            $list_id = $_REQUEST["list_id"];  
+            $archived = $_REQUEST["archived"];  
+
+  
+            try {
+                $id = $cardBLL->insert($title, $description, $end_date, $list_id, $archived);
+                $objCardInsertada = $cardBLL->select($id);
+                
+                echo json_encode($objCardInsertada);
+            } catch (Exception $exc) {
+                echo $exc->getTraceAsString();
+            }
+        }
+        else{
+            echo "Hubo un error";
+        }
+
+        break;    
     case "get_all":
         $listas = $listaBLL->selectAll();
         echo json_encode($listas);
@@ -83,10 +111,39 @@ switch ($task) {
             echo "que pacho";
         }
         break;
+
+    case "move":
+
+        if (isset($_REQUEST["list_id"]) && isset($_REQUEST["id"])) 
+        {
+            $list_id = $_REQUEST["list_id"];
+            $id = $_REQUEST["id"];
+            try{
+                $card = $cardBLL->move($list_id, $id);
+                $objCardModificada = $cardBLL->select($id);
+                echo json_encode($objCardModificada);
+            }catch(Exception $e){
+                echo $e;
+            }
+        }
+        else{
+            echo "que pacho";
+        }
+        break;    
     case "delete":
         if (isset($_REQUEST["id"])) {
             $id = $_REQUEST["id"];
             $listaBLL->delete($id);
+            echo $id;
+        }
+        else{
+            echo json_encode("que pacho");
+        }
+        break;
+    case "delete_card":
+        if (isset($_REQUEST["id"])) {
+            $id = $_REQUEST["id"];
+            $cardBLL->delete($id);
             echo $id;
         }
         else{

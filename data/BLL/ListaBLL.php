@@ -43,7 +43,7 @@ class ListaBLL {
             return null;
         }
         $row = $res->fetch(PDO::FETCH_ASSOC);
-        $objLista = $this->rowToDto($row);
+        $objLista = $this->rowToDto2($row);
         return $objLista;
     }
 
@@ -89,6 +89,14 @@ class ListaBLL {
         $objLista->setName($row["name"]);
         $objLista->setDescription($row["description"]);
         $objLista->setCards($cards);
+        return $objLista;
+    }
+
+    public function rowToDto2($row) {
+        $objLista = new Lista();
+        $objLista->setId($row["id"]);
+        $objLista->setName($row["name"]);
+        $objLista->setDescription($row["description"]);
         return $objLista;
     }
 

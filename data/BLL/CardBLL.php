@@ -62,7 +62,7 @@ class CardBLL {
             INSERT INTO cards (title, description, end_date, list_id, archived)
             VALUES (:varTitle, :varDescription, :varEndDate, :varListId, :varArchived)
         ", array(
-            ":varTitle" => $name,
+            ":varTitle" => $title,
             ":varDescription" => $description,
             ":varEndDate" => $end_date,
             ":varListId" => $list_id,
@@ -87,6 +87,18 @@ class CardBLL {
             ":varEndDate" => $end_date,
             ":varListId" => $list_id,
             ":varArchived" => $archived,
+            ":varId" => $id,
+        ));
+    }
+
+    public function move($list_id, $id) {
+        $objConexion = new Connection();
+        $objConexion->queryWithParams("
+            UPDATE cards
+            SET list_id = :varListId
+            WHERE id = :varId
+        ", array(
+            ":varListId" => $list_id,
             ":varId" => $id,
         ));
     }
