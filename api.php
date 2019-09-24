@@ -90,7 +90,49 @@ switch ($task) {
             echo json_encode("No existe id en los paramentros");
         }
         break;
+    case "get_card":
+        if (isset($_REQUEST["id"])) {
+            $id = $_REQUEST["id"];
+            try{
+                $objCard = $cardBLL->select($id);
+                if($objCard == NULL){
+                    echo json_encode("no existe lista con id ". $id ."");  
+                }
+                else{
+                    echo json_encode($objCard);    
+                }
+            } catch (Exception $exc) {
+                echo $exc->getTraceAsString();
+            }
+            
+        }
+        else{
+            echo json_encode("No existe id en los paramentros");
+        }
+        break;  
+    case "update_card":
 
+        if (isset($_REQUEST["title"]) && isset($_REQUEST["description"]) && isset($_REQUEST["end_date"]) && isset($_REQUEST["archived"]) && isset($_REQUEST["list_id"])) 
+        {
+            $title = $_REQUEST["title"];
+            $description = $_REQUEST["description"];
+            $end_date = $_REQUEST["end_date"];
+            $list_id = $_REQUEST["list_id"];
+            $archived = $_REQUEST["archived"];
+            $id = $_REQUEST["id"];
+
+            try{
+                $card = $cardBLL->update($title, $description, $end_date, $list_id, $archived, $id);
+                $objcardModificada = $cardBLL->select($id);
+                echo json_encode($objcardModificada);
+            }catch(Exception $e){
+                echo $e;
+            }
+        }
+        else{
+            echo "que pacho";
+        }
+        break;      
     case "update":
 
         if (isset($_REQUEST["name"]) && isset($_REQUEST["description"]) && isset($_REQUEST["id"])) 
