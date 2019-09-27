@@ -69,7 +69,12 @@ switch ($task) {
     case "get_all_cards":
         $cards = $cardBLL->selectAll();
         echo json_encode($cards);
-        break;    
+        break;   
+    case "search":
+        $text = $_REQUEST["search"];
+        $cards = $cardBLL->search($text);
+        echo json_encode($cards);
+        break;         
     case "get":
         if (isset($_REQUEST["id"])) {
             $id = $_REQUEST["id"];

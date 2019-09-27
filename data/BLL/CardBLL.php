@@ -19,6 +19,26 @@ class CardBLL {
         return $listaCards;
     }
 
+    public function search($text) {
+        $listaCards = array();
+
+        $objConexion = new Connection();
+
+        $res = $objConexion->queryWithParams("
+            SELECT id, title, description, end_date, list_id, archived
+            FROM cards
+            WHERE title like :varText
+        ", array(
+            ":varText" => $text . '%'
+        ));
+
+        while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
+            $cards = $this->rowToDto($row);
+            $listaCards[] = $cards;
+        }
+        return $listaCards;
+    }
+
     public function selectByListId($list_id) {
         $listaCards = array();
 
@@ -27,9 +47,10 @@ class CardBLL {
         $res = $objConexion->queryWithParams("
             SELECT id, title, description, end_date, list_id, archived
             FROM cards
-            WHERE list_id = :varListId
+            WHERE list_id = :varListId  and archived = :varArchived
         ", array(
-            ":varListId" => $list_id
+            ":varListId" => $list_id,
+            ":varArchived" => 0
         ));
 
         while ($row = $res->fetch(PDO::FETCH_ASSOC)) {
